@@ -5,7 +5,7 @@ import ctypes.util
 
 def load_library():
     libpath = ctypes.util.find_library('mhash')
-    return ctypes.CDLL(libpath), ctypes.CDLL(None)
+    return ctypes.CDLL(libpath)
 
 MHASH_CRC32     = 0
 MHASH_MD5       = 1
@@ -35,7 +35,7 @@ MHASH_SNEFRU256 = 27
 
 
 try:
-    lib, c_lib = load_library()
+    lib = load_library()
     lib.mhash_init.argtypes = [ctypes.c_int]
     lib.mhash_init.restype = ctypes.c_void_p
 
@@ -46,7 +46,7 @@ try:
     lib.mhash_get_block_size.argtypes = [ctypes.c_int]
     lib.mhash_get_block_size.restype = ctypes.c_int
 
-    c_lib.free.argtypes = [ctypes.c_void_p]
+    lib.mutils_free.argtypes = [ctypes.c_void_p]
 except AttributeError:
     raise ImportError('mhash shared library not found or incompatible')
 except (OSError, IOError):
